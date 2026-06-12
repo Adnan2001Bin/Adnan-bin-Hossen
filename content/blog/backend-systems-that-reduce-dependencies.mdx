@@ -1,0 +1,63 @@
+---
+title: "Building Backend Systems That Reduce External Dependencies"
+status: "published"
+date: "2026-03-28"
+updatedAt: "2026-06-09"
+excerpt: "Reducing dependency sprawl is not about avoiding vendors. It is about owning the product-critical loops that define reliability, cost, and iteration speed."
+tags:
+  - Backend
+  - SaaS
+  - Infrastructure
+image:
+  light: "/images/blended/code-light.avif"
+  dark: "/images/blended/code.avif"
+  alt: "Risograph illustration of API and backend system shapes."
+seoTitle: "Building Backend Systems That Reduce External Dependencies"
+seoDescription: "Reducing dependency sprawl is about owning the product-critical loops that define reliability, cost, and iteration speed."
+---
+
+External tools are useful right up until they sit directly inside the product's most important feedback loops. Lead search, enrichment, verification, warmup, deliverability, and automation are good examples: each one can start as a tidy vendor integration, and each one eventually becomes the thing your product is actually judged on. When that happens, "we just call an API for that" stops being a convenience and starts being a constraint.
+
+Reducing external dependencies is not a purity game, and it is not about building everything yourself. It is a reliability and product-speed decision. The useful question is never "vendor or in-house" in the abstract — it is "which loops do we need to control, and which can we safely rent."
+
+## Why dependency sprawl hurts later, not now
+
+Early on, every integration is a gift. It turns a month of work into an afternoon and lets a small team ship something that looks complete. The cost is invisible because the product is small and the vendor is behaving.
+
+The bill arrives later, and it arrives in three forms. **Reliability** becomes coupled to systems you cannot see into: when the vendor degrades, your product degrades, and your support queue fills with problems you cannot directly fix. **Cost** scales with success in a way you do not control, because the price curve was set by someone optimizing their margin, not yours. And **iteration speed** quietly drops, because the most interesting product improvements turn out to live inside the black box you rented.
+
+None of these show up in a demo. They show up six months in, when the workflow you wrapped is the workflow customers feel every day.
+
+## What is worth owning
+
+Three tests help decide what to internalize.
+
+**Own the parts that shape user trust.** If a user depends on a workflow every single day, the system should expose clear status, retries, limits, and observability. A black-box integration makes that hard: you cannot show a user *why* their thing failed if you do not own the place it failed. The closer a loop is to daily trust, the more it wants to be yours.
+
+**Own the parts that define margin.** If the cost curve rises with every successful customer — per-verification, per-enrichment, per-call pricing on a core action — internalizing part of that workflow can be what makes the product durable rather than a treadmill. You do not have to own all of it; sometimes owning the high-volume 80% and renting the long tail is the right split.
+
+**Own the parts that create differentiation.** If everyone in your category wires the same vendor in the same way, the product ceiling is low and the experience is interchangeable. The places where you do something specific — a better enrichment heuristic, a tighter deliverability loop, a smarter retry policy — are exactly the places worth building.
+
+## Where vendors still win
+
+The inverse matters just as much, because over-correcting is its own failure. Some capabilities are better rented, indefinitely. Commodity infrastructure, compliance-heavy surfaces, and genuinely low-volume tasks rarely justify a custom system. Payments, email transport, identity, and the like are usually someone else's core competency and your distraction.
+
+The point is to choose deliberately rather than by default. "We build this because it is core; we rent that because it is commodity" is a sentence you should be able to say about every major dependency, and the answer is allowed to change as the product grows.
+
+## Make replaceability a first-class design goal
+
+You rarely have to choose between "vendor forever" and "build it now." The more useful stance is to keep integrations replaceable without pretending replacement is free. In practice that means putting a thin internal interface in front of every external dependency, so the rest of the system talks to *your* contract rather than the vendor's SDK:
+
+```python
+class EmailVerifier(Protocol):
+    async def verify(self, address: str) -> VerificationResult: ...
+
+# Today this wraps a vendor; tomorrow it can wrap your own service.
+# Callers never know which, because they only see VerificationResult.
+```
+
+That seam costs almost nothing up front and buys you two things. It contains the blast radius when a vendor changes its API or its pricing, and it lets you migrate a loop in-house incrementally — start by shadowing the vendor, then route a percentage of traffic, then flip the default — without a rewrite. Observability lives at the seam too: you measure latency, error rates, and cost at your interface, so you can see a dependency degrading before your users tell you.
+
+## The durable lesson
+
+A backend becomes strategic when it lets the product move faster, observe itself clearly, and control the workflows customers actually feel. Reducing external dependencies is just the concrete form of that: decide which loops define your product, own those deliberately, rent the rest honestly, and keep every seam replaceable so the decision can change as you learn.

@@ -1,0 +1,20 @@
+{
+  "pdfPath": "https://drive.google.com/file/d/12HW8pVIbxe-shVCfu3FC6Ri8Qd-QO4Hl/view?usp=drive_link",
+  "headline": "Ambitious Full-Stack Web Developer passionate about building user-centric applications and automating workflows.",
+  "summary": "Proficient in both front-end and back-end development, I specialize in creating scalable and efficient solutions. With a keen interest in machine learning and automation, I stay ahead of industry trends to drive innovation and deliver impactful results.",
+  "sourceNote": "Download the latest CV from the Google Drive link above.",
+  "education": [
+    {
+      "institution": "Daffodil International University",
+      "location": "Dhaka, Bangladesh",
+      "credential": "Bachelor of Science in Computer Science",
+      "start": "",
+      "end": "",
+      "highlights": []
+    }
+  ],
+  "languages": [
+    { "name": "English", "proficiency": "Professional Proficiency" },
+    { "name": "Bangla", "proficiency": "Native" }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "items": [
+    {
+      "label": "About",
+      "href": "/#about"
+    },
+    {
+      "label": "Work",
+      "href": "/work"
+    },
+    {
+      "label": "Blog",
+      "href": "/blog"
+    },
+    {
+      "label": "How I work",
+      "href": "/uses"
+    },
+    {
+      "label": "Contact",
+      "href": "/#contact"
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "groups": [
+    {
+      "category": "Frontend",
+      "skills": [
+        "React.js",
+        "React Native",
+        "Next.js",
+        "Tailwind CSS",
+        "Redux",
+        "Framer Motion",
+        "HTML",
+        "CSS"
+      ]
+    },
+    {
+      "category": "Backend and APIs",
+      "skills": [
+        "Node.js",
+        "Express.js",
+        "RESTful APIs",
+        "Python",
+        "JavaScript",
+        "TypeScript",
+        "Java"
+      ]
+    },
+    {
+      "category": "Database and Infrastructure",
+      "skills": [
+        "MongoDB",
+        "Mongoose",
+        "Supabase",
+        "JWT",
+        "Firebase",
+        "Appwrite",
+        "Docker",
+        "Git",
+        "GitHub",
+        "Vercel",
+        "Netlify"
+      ]
+    },
+    {
+      "category": "Tools and Design",
+      "skills": [
+        "Postman",
+        "Power BI",
+        "Pandas",
+        "NumPy",
+        "Figma",
+        "Canva",
+        "Photoshop"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+---
+title: "Designing Search APIs for Agentic Workflows"
+status: "published"
+date: "2026-04-12"
+updatedAt: "2026-06-09"
+excerpt: "Agent-facing search APIs need more than links. They need source-aware results, clean markdown, compact context, and predictable failure modes."
+tags:
+  - AI Search
+  - RAG
+  - Backend
+image:
+  light: "/images/blended/design-light.avif"
+  dark: "/images/blended/design.avif"
+  alt: "Risograph illustration of search and interface symbols."
+seoTitle: "Designing Search APIs for Agentic Workflows"
+seoDescription: "Agent-facing search APIs need source-aware results, clean markdown, compact context, and predictable failure modes."
+---
+
+Search APIs for humans and search APIs for agents have different jobs. A person can skim, compare, open tabs, and repair missing context. They tolerate a messy results page because they bring judgment to it. An agent usually receives one compressed response and has to make the next decision from that response, with no second screen and no instinct for when a snippet is misleading.
+
+That difference is the whole design problem. When the consumer is a model inside a loop, the API contract becomes the product. The response should carry enough structure to be useful without forcing the model to reverse-engineer a web page, and it should fail in ways the calling system can detect and recover from.
+
+This post collects the things I keep coming back to when building search and retrieval surfaces for agents, RAG pipelines, and research workflows.
+
+## Start from the consumer, not the index
+
+The first mistake is designing the response around what the search engine happens to return. A ranked list of links with title and snippet is optimized for a human deciding which tab to open. An agent is not opening tabs. It is deciding whether it now has enough evidence to answer, or whether it should retrieve again, or whether it should hand off to a different tool.
+
+So the design question is not "what did we find" but "what does the next step need to decide." Concretely, that usually means three things travel together for each result: the source (URL, domain, publish date, retrieval timestamp), the extracted content (clean, structured, ready to read), and a sense of quality (rank, why it ranked, extraction status). When those are separated cleanly, a downstream model can cite sources, discard weak matches, and decide whether to search deeper — without parsing prose to figure out what it is holding.
+
+## Three properties worth optimizing for
+
+**Predictable shape.** Titles, URLs, snippets, dates, extracted markdown, and source metadata should appear in the same place every time. Models — and the code around them — get more reliable when the schema does not move. A field that is sometimes a string and sometimes an object is a latent bug in every consumer.
+
+**Context density.** Every token in the response should earn its place: it should help answer the query, help verify the source, or help choose the next retrieval step. Decorative HTML, navigation chrome, cookie banners, and repeated boilerplate are pure cost in a context window. Density is not about returning less; it is about returning nothing that does not pull weight.
+
+**Graceful uncertainty.** If a result is weak, stale, blocked, or only partially extracted, the API should say so directly. Silent confidence is far more expensive than honest incompleteness, because the agent will act on whatever it is handed. A response that admits "extraction partial" or "source returned 403" lets the caller route around the gap instead of hallucinating over it.
+
+## Markdown is usually the right transport
+
+For RAG and research agents, markdown is often a better transport layer than raw HTML. It keeps the hierarchy and the links that carry meaning while removing the layout noise that carries none. Headings stay headings, lists stay lists, and a model can follow the structure instead of fighting `<div>` soup.
+
+The trick is to keep the markdown clean rather than decorative. The goal is faithful structure, not a pretty rendering. Strip the chrome, preserve the semantics, and keep link targets intact so the agent can cite or follow them. This is also where most of the token savings come from in practice — clean markdown of an article is dramatically smaller than the HTML it came from, with more of its remaining tokens actually informative.
+
+## A response model that holds up
+
+A shape I keep returning to separates the source, the extracted content, and the ranking explanation:
+
+```json
+{
+  "query": "vector database options for small teams",
+  "results": [
+    {
+      "title": "Choosing a vector store",
+      "url": "https://example.com/vector-store",
+      "published_at": "2026-01-12",
+      "retrieved_at": "2026-04-12T09:30:00Z",
+      "rank": 1,
+      "extraction": "ok",
+      "content_markdown": "# Choosing a vector store\n\n..."
+    }
+  ],
+  "status": "ok",
+  "notes": []
+}
+```
+
+The point is not the exact field names. It is that the source, the content, and the system's own assessment of the result are distinct, so the consumer never has to infer one from the other. When extraction fails, `extraction` flips to `partial` or `failed` and `notes` explains why — the result still appears, but the agent knows not to trust the body.
+
+## Design for the loop, not the single call
+
+Agents rarely make one search and stop. They search, read, decide, and often search again with a refined query. That means the API should make iteration cheap and legible. Compact responses keep each loop affordable in tokens. Stable pagination and consistent ranking let the agent reason about what it has already seen. And explicit failure modes mean a bad call costs one retry, not a derailed run.
+
+It also helps to expose latency and cost characteristics honestly, because tight agent loops are sensitive to both. A retrieval surface that is fast and compact can be called more often and reasoned over more aggressively; one that is slow and bloated forces the calling system to ration it, which usually means worse answers.
+
+## The durable lesson
+
+Agentic systems do not become reliable because one model call is clever. They become reliable when every tool response is shaped for inspection, compression, and recovery. A search API built for agents is, in the end, a small contract: predictable structure, honest signals, and content that is ready to reason over. Get that contract right and the intelligence above it has something solid to stand on.

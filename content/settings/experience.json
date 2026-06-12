@@ -1,0 +1,19 @@
+{
+  "items": [
+    {
+      "organization": "TAF Technology",
+      "location": "Remote",
+      "role": "Web Developer",
+      "start": "Nov 2025",
+      "end": "Present",
+      "highlights": [
+        "Developed and maintained web applications using React.js, Node.js, Express.js, and Tailwind CSS.",
+        "Built React Native mobile applications with optimized performance and seamless API integration.",
+        "Collaborated with designers and backend teams to deliver scalable and efficient features.",
+        "Integrated RESTful APIs and optimized frontend performance for better user experience.",
+        "Worked with Git, GitHub, and project management tools to follow agile development workflows.",
+        "Contributed to debugging, bug fixing, and improving UI/UX across web and mobile platforms."
+      ]
+    }
+  ]
+}

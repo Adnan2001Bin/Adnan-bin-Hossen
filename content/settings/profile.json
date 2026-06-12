@@ -1,0 +1,41 @@
+{
+  "name": "Adnan Bin Hossen",
+  "email": "adnan2001bin@gmail.com",
+  "url": "https://adnan-bin-hossenebon.vercel.app",
+  "role": "Full-stack Developer",
+  "titles": [
+    "Full-stack Developer",
+    "Web Developer",
+    "React Developer"
+  ],
+  "location": "Ashulia, Dhaka, Bangladesh",
+  "availability": "Available for freelance projects and full-time opportunities",
+  "booking": "https://drive.google.com/file/d/12HW8pVIbxe-shVCfu3FC6Ri8Qd-QO4Hl/view?usp=drive_link",
+  "summary": "Ambitious Full-Stack Web Developer passionate about building user-centric applications and automating workflows. Proficient in both front-end and back-end development, I specialize in creating scalable and efficient solutions with modern web technologies.",
+  "socials": [
+    {
+      "label": "GitHub",
+      "username": "Adnan2001Bin",
+      "href": "https://github.com/Adnan2001Bin",
+      "icon": "github"
+    },
+    {
+      "label": "LinkedIn",
+      "username": "in/adnan-bin-hossen",
+      "href": "https://www.linkedin.com/in/adnan-bin-hossen/",
+      "icon": "linkedin"
+    },
+    {
+      "label": "Facebook",
+      "username": "adnanbin.hossen",
+      "href": "https://www.facebook.com/adnanbin.hossen",
+      "icon": "external"
+    },
+    {
+      "label": "Email",
+      "username": "adnan2001bin@gmail.com",
+      "href": "mailto:adnan2001bin@gmail.com",
+      "icon": "mail"
+    }
+  ]
+}
